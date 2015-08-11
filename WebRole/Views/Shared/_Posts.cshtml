@@ -1,0 +1,12 @@
+﻿@using WebRole.Models
+
+@if (ViewData.ContainsKey("Posts"))
+{
+    foreach (BlogPost post in (IList<BlogPost>)ViewData["Posts"])
+    {
+        <div class="post-preview">
+            <a href="/Post/@ViewData["Subtitle"]/@post.Slug"><h2 class="post-title">@post.Title</h2></a>
+            <h5>Last updated at <i>@post.Updated</i></h5>
+        </div>
+    }
+}

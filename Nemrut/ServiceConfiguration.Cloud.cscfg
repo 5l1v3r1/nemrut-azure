@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="Nemrut" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="WebRole">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=nemrut;AccountKey=h9jPq+KRMoEE6976dEZeSt4qWEwwlUsOGWiAg3VLYYYaweSazAbRUGSMu6PafZJ0qS+xQUe0Y96pUbpO7JIFCg==" />
+      <Setting name="Nemrut.Live.LoginUrIFormat" value="https://login.live.com/oauth20_authorize.srf" />
+      <Setting name="Nemrut.Live.GrantType" value="authorization_code" />
+      <Setting name="Nemrut.Live.AuthUrl" value="https://login.live.com/oauth20_token.srf" />
+      <Setting name="Nemrut.OneDrive.ClientId" value="0000000048160B88" />
+      <Setting name="Nemrut.OneDrive.ClientSecret" value="fQV5GyRbMnA8Pjbva8BwkoIJdTnffFzr" />
+      <Setting name="Nemrut.OneDrive.Scope" value="onedrive.readwrite" />
+      <Setting name="Nemrut.OneDrive.AuthUriFormat" value="https://api.onedrive.com/v1.0/" />
+      <Setting name="Nemrut.OneDrive.RedirectUri" value="http://nemrut.cloudapp.net/Login" />
+      <Setting name="Nemrut.App.Name" value="Nemrut" />
+      <Setting name="Nemrut.Mongo.ConnectionString" value="mongodb://crowdy:crowdy@ds045157.mongolab.com:45157/crowdy" />
+      <Setting name="Nemrut.Mongo.Name" value="nemrut-azure" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

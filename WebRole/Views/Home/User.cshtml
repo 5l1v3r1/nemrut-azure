@@ -1,0 +1,18 @@
+﻿@Html.Partial("_Navbar")
+@Html.Partial("_Header")
+@Html.Partial("_Messages")
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            @Html.Partial("_Posts")
+
+            @if (!ViewData.ContainsKey("HasPost") || !(bool)ViewData["HasPost"])
+            {
+                <div class="post-preview">
+                    <h1>Nothing to blog about yet. Stay tuned.</h1>
+                </div>
+            }
+        </div>
+    </div>
+</div>

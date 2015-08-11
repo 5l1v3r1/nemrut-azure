@@ -1,0 +1,22 @@
+﻿@Html.Partial("_Navbar")
+@Html.Partial("_Header")
+@Html.Partial("_Messages")
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="row">
+                <p class="text-right"><a class="btn btn-primary" href="/Sync" id="sync"><i class="fa fa-repeat"></i> Sync</a></p>
+            </div>
+            @Html.Partial("_Posts")
+
+            @if (!ViewData.ContainsKey("HasPost") || !(bool)ViewData["HasPost"])
+            {
+                <div class="post-preview">
+                    <h1>Go ahead and create your first blog entry in OneDrive under the folder <strong><i>nemrut</i></strong>.</h1>
+                    <p>Once you create a text file (ending with <i>txt</i> extension) or Markdown file (ending with <i>md</i>), come back and refresh the page. Your files will turn into blog posts.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
