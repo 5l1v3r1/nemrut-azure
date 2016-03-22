@@ -5,11 +5,15 @@ using System.Web.Routing;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using WebRole.App_Start;
+using Pour.Core.Library;
+using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace WebRole
 {
     public class MvcApplication : HttpApplication
     {
+        public static ILogger Logger;
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -18,6 +22,23 @@ namespace WebRole
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             RegisterConfigurations();
+
+            // Connect to Pour
+            if (string.IsNullOrEmpty(AppConfig.Read("Nemrut.App.PourToken")))
+            {
+                Logger = LogManager.Connect();
+            }
+            else
+            {
+                Logger = LogManager.Connect(AppConfig.Read("Nemrut.App.PourToken"));
+            }
+
+            // Set Azure role name and id as context to attach each log message
+            LogManager.SetContext("RoleName", RoleEnvironment.CurrentRoleInstance.Role.Name);
+            LogManager.SetContext("RoleId", RoleEnvironment.CurrentRoleInstance.Id);
+
+            // Log the initialization
+            Logger.Info("Starting the service");
 
             ConnectToDb();
         }
@@ -35,6 +56,7 @@ namespace WebRole
             AppConfig.Register("Nemrut.App.LoginUriFormat", 
                 "https://login.live.com/oauth20_authorize.srf?client_id={0}&scope={1}&response_type=code&redirect_uri={2}");
             AppConfig.Register("Nemrut.App.Name");
+            AppConfig.Register("Nemrut.App.PourToken");
             AppConfig.Register("Nemrut.Mongo.ConnectionString");
             AppConfig.Register("Nemrut.Mongo.Name");
             AppConfig.Register("Nemrut.App.LoginUri", 

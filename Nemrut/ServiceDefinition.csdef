@@ -19,6 +19,7 @@
       <Setting name="Nemrut.OneDrive.AuthUriFormat" />
       <Setting name="Nemrut.OneDrive.RedirectUri" />
       <Setting name="Nemrut.App.Name" />
+      <Setting name="Nemrut.App.PourToken" />
       <Setting name="Nemrut.Mongo.ConnectionString" />
       <Setting name="Nemrut.Mongo.Name" />
     </ConfigurationSettings>

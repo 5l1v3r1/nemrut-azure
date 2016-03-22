@@ -13,6 +13,7 @@
       <Setting name="Nemrut.OneDrive.AuthUriFormat" value="https://api.onedrive.com/v1.0/" />
       <Setting name="Nemrut.OneDrive.RedirectUri" value="http://localhost:52282/Login" />
       <Setting name="Nemrut.App.Name" value="Nemrut" />
+      <Setting name="Nemrut.App.PourToken" value="28a96c5f85ee2e2c912f9d5fc9781807IsapoWEkejLb2RorRqlg5L0S8jmwrfTA" />
       <Setting name="Nemrut.Mongo.ConnectionString" value="mongodb://crowdy:crowdy@ds045157.mongolab.com:45157/crowdy" />
       <Setting name="Nemrut.Mongo.Name" value="nemrut-azure" />
     </ConfigurationSettings>

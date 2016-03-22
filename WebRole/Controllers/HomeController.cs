@@ -46,8 +46,13 @@ namespace WebRole.Controllers
             bool authenticated = Authenticate(code, out errorMessage, out userId, out accessToken);
             if (authenticated)
             {
+                MvcApplication.Logger.Info(string.Format("Authenticed user {0} with token {1}", userId, accessToken));
                 Session.Add("user_id", userId);
                 Session.Add("access_token", accessToken);
+            }
+            else
+            {
+                MvcApplication.Logger.Warning(string.Format("Authentication failed for user {0} with message {1}", userId, errorMessage));
             }
 
             var userIsInSession = authenticated && await DoesUserHaveSession(userId);
@@ -176,12 +181,14 @@ namespace WebRole.Controllers
             catch (Exception e)
             {
                 ViewData["Error"] = e.Message;
+                MvcApplication.Logger.Error(string.Format("Adding a new user is failed with message {0}", e.Message));
                 return View("GetStarted");
             }
         }
 
         public async Task<ViewResult> Post(string username, string slug)
         {
+            MvcApplication.Logger.Info(string.Format("Attempting to show post for user {0} for slug {1}", username, slug));
             var user = await GetUser(new BsonDocument {{"username", username}});
             if (user != null)
             {
@@ -230,6 +237,8 @@ namespace WebRole.Controllers
                         catch (Exception e)
                         {
                             ViewData["Error"] = "Something went wrong. Error: " + e.Message;
+                            MvcApplication.Logger.Error(string.Format("Failed to show post for user {0} for slug {1} with message {2}", 
+                                username, slug, e.Message));
                         }
                         return View();
                     }
@@ -345,6 +354,7 @@ namespace WebRole.Controllers
         {
             try
             {
+                MvcApplication.Logger.Info(string.Format("Making a Web request is to uri {0}", uri));
                 errorMessage = string.Empty;
                 WebRequest tokenRequest = WebRequest.Create(uri);
                 WebResponse tokenResponse = tokenRequest.GetResponse();
@@ -360,6 +370,7 @@ namespace WebRole.Controllers
             catch (Exception e)
             {
                 errorMessage = string.Format("The request operation is failed. Error: {0}", e.Message);
+                MvcApplication.Logger.Error(string.Format("Web request is failed for uri {0} with message {1}", uri, e.Message));
                 return default(T);
             }
         }
@@ -401,8 +412,9 @@ namespace WebRole.Controllers
                     return user;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                MvcApplication.Logger.Error(string.Format("Getting user is failed with message {0}", e.Message));
             }
 
             return null;
@@ -430,6 +442,8 @@ namespace WebRole.Controllers
         private async Task<bool> AddUser(string username, string name)
         {
             string userId = Session["user_id"].ToString();
+            MvcApplication.Logger.Info(string.Format("Adding new user {0}", userId));
+
             BsonDocument newUser = new BsonDocument{ {"_id", userId }, { "name", name }, { "username", username } };
             await Collection.InsertOneAsync(newUser);
             Session["user"] = new User
@@ -447,6 +461,7 @@ namespace WebRole.Controllers
         {
             try
             {
+                MvcApplication.Logger.Info(string.Format("Creating app folder for user {0}", Session["user_id"]));
                 errorMessage = string.Empty;
                 WebRequest request = WebRequest.Create(string.Format("{0}{1}", AppConfig.Read("Nemrut.OneDrive.AuthUriFormat"), "drive/root/children"));
                 request.Method = "POST";
@@ -464,6 +479,7 @@ namespace WebRole.Controllers
             catch (Exception e)
             {
                 errorMessage = e.Message;
+                MvcApplication.Logger.Error(string.Format("Creating app folder failed for user {0} with message {1}", Session["user_id"], errorMessage));
                 return false;
             }
             return true;
@@ -475,6 +491,7 @@ namespace WebRole.Controllers
         {
             try
             {
+                MvcApplication.Logger.Info(string.Format("Creating file link for id {0}", id));
                 errorMessage = string.Empty;
                 WebRequest request = WebRequest.Create(
                     string.Format("{0}{1}", AppConfig.Read("Nemrut.OneDrive.AuthUriFormat"), "drive/items/" + id + "/action.createLink"));
@@ -504,6 +521,7 @@ namespace WebRole.Controllers
             catch (Exception e)
             {
                 errorMessage = e.Message;
+                MvcApplication.Logger.Error(string.Format("Creating file link is failed for id {0} with message {1}", id, errorMessage));
             }
 
             return string.Empty;
